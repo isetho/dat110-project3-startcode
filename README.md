@@ -1,18 +1,55 @@
-### Project 3 - Weeks 13 and 14: 23/03 - 03/04
+### Project 3 - Weeks 12 to 14: 15/03 - 06/04
 
 ### DHT Cooperative Mirroring with consistency protocol and Distributed Mutual Exclusion.
+
+### Organisation
+
+The project work is to be undertaken in groups of 2-4 students - preferably the same groups as for project 1.
+
+Discussions among the groups are allowed, but the code handed in by the group should be the work of the group members - and not members of other groups.
+
+You are strongly encouraged to use the DAT110 Discord server throughout the project if you encounter issues or have questions related to the project.
+
+The deadline for handing in the project can be found in Canvas.
+
+### Getting Started - obtaining the start-code and the unit-test projects
+
+#### Fork and Clone the start-code repository
+
+One member of the group should start by entering the following repository on github:
+
+https://github.com/selabhvl/dat110-project3-startcode.git
+
+and then do a Fork of the repository (see button in the upper right of the repository web page).
+
+This will create a "copy" of the start-code repository on the group members own github repository account.
+
+In order for the other group members to work together on the forked copy of the start-code, the other group members must be provided with access to read/write on the forked repository. See Settings and Manage Access for the repository.
+
+All group members should clone the forked repository which can now be used as a repository for collaborating on the code.
+
+#### Clone the testing repository
+
+In addition, each group member should clone (but not fork) the following project:
+
+https://github.com/selabhvl/dat110-project3-testing.git
+
+which contains a number of unit tests that can be used for some basic testing of the implemented functionality. These tests are by no means complete, and when running the test you should also check in the Eclipse console that no exceptions are raised when running the tests.
+
+It should not be necessary to add additional classes in the start-code in order to complete the project. The unit-tests should not be modified as they will be used for evaluation of the submitted solution.
+
+### Overview
 
 The project assumes that you have read and understood the following sections in the Distributed system book:
 - Section 5.2 - Distributed hash tables (DHT) (Naming)
 - Section 6.3 - Mutual Exclusion Distributed algorithm (Coordination)
 - Section 7.5 - Remote-write protocols (Consistency and Replication)
 
-Therefore the project builds on exercise 8 - Chord Distributed Hash Table (https://github.com/selabhvl/dat110public-2020/blob/master/week8/week8.md)
+Therefore the project builds on exercise in week 6 - Chord Distributed Hash Table (https://github.com/selabhvl/dat110public-2021/blob/master/week6/week6.md)
 
-### Description of project
-This implementation is based on synchronous communication by using the Java RMI remote procedure call (RPC)
+The implementation is based on synchronous communication by using the Java RMI remote procedure call (RPC)
 The system works under these models and assumptions
-- Our protocol uses strict, sequential consistency model and replicated write protocol
+- Our protocol uses strict, sequential consistency model and replicated write protocol. In addition, it uses a distributed mutual exclusion algorithm.
 - We assume no message loss during communications
 - We assume that network is stable and there is no communication failure
 
@@ -26,7 +63,6 @@ The idea behind cooperative mirroring is that a node can replicate its content a
 In this project, we can replicate a resource (e.g. a file) and distribute the replicas to running processes (peers) that are arranged in a ring topology. This design provides fault-tolerance and high availability for the resource.
 However, to achieve these qualities require an efficient naming system. The DHT system provides the mechanism to pair a resource to the address where it can be stored and located.
 Given a resource (e.g. a file), we can lookup the DHT system for the server(s) storing this file. The DHT system uses the same address space for naming a resource and its access point (peers).
-
 
 The project is divided into six packages:
 
@@ -47,44 +83,9 @@ checking if a key lies within a node/peer and its predecessor. (pred < key <= no
 The current implementation of the project allows the simulation of chord ring in a single machine environment but it can be simply modified to use multiple computers by using IP address for the nodename.
 
 
-### Organisation
-
-The project will be carried out in weeks 13 and 14. We will use existing group size limit. Discussions among the groups are allowed, but the code handed in by the group should be the work of the group members - and not members of other groups.
-Submission of your code should follow previous formats on canvas.
-
-### Getting Started
-
-You should start by cloning the Java code which can be found in this github repository.
-
-https://github.com/selabhvl/dat110-project3-startcode.git
-
-which contains an Eclipse-project for both the ChordDHT with start-code. In addition, it also contains a number of unit tests which can be used for testing the implemented functionalities. The unit-tests should not be modified/removed as they will be used for evaluation of the submitted solution.
-
-You should also separately clone the unit test cases which can be found in this repository.
-
-https://github.com/selabhvl/dat110-project3-testing.git
-
-In order for the group to use their own git-repository for further work on the codebase, one member of the group must create an empty repository on github/bitbucket without a README file and without a `.gitignore` file, and then perform the following operations
-
-`git remote remove origin`
-
-`git remote add origin <url-to-new-empty-repository>`
-
-`git push -u origin master`
-
-The other group members can now clone this new repository and work with a shared repository as usual.
-
-
 ### Complete ChordDHT with Consistency protocol and Distributed Mutual Exclusion
 
 ![](assets/chord.png)
-
-### Preambles - IDEs for project and unit testing
-You will need to maintain two IDEs (e.g. 2 eclipse windows). One for the project (https://github.com/selabhvl/dat110-project3-startcode.git) and another one for the unit-test project (https://github.com/selabhvl/dat110-project3-testing.git).
-In the unit-test IDE, you will also need to import the original project into the IDE workspace but make sure you DO NOT SELECT THE OPTION TO COPY THE PROJECT INTO THE WORKSPACE. The project must be using the same directory as in the first IDE. You can then configure your build path for the unit-test project to include the original project as a required project.
-Attempting to test using the same IDE will be difficult because you will have processes that are running with multiple threads and printing info to the output at a regular interval. Therefore, when you have implemented missing functionalities and need to test, you should start the 5 processes located in (no.hvl.dat110.peers) and switch to the IDE holding the unit test classes to test whichever functionalities you have implemented.
-Running the processes outside of the IDE is also possible. You can jar the processes using the script located in /chordjars. To do this, you should copy the bin folder containing compiled classes from your project into the chordjars folder, go to the terminal, change directory to the chordjars folder and execute the bash script ./chord.sh
-You can then open new windows/tabs from your terminal and execute $> java -jar process1.jar and repeat this for the remaining 4 processes in their own window. 
 
 ### Tasks
 
@@ -146,3 +147,16 @@ Tasks 3 to 7 require that the 5 chord processes are started before you can test 
 - no.hvl.dat110.utility.FileDistributorClient: should be used to distribute files (5 files from the file folder) to the replicas in the chord ring. Note that the 5 processes must have been started before running this class. 
 - no.hvl.dat110.utility.FileFinderClient: can be used as client that requests for all server replicas holding any of the distributed files.
 - no.hvl.dat110.utility.RingMonitor: can be run to see if the ring is correct.
+
+### IDEs for project and unit testing
+You will need to maintain two IDEs (e.g. 2 eclipse windows). One for the project (https://github.com/selabhvl/dat110-project3-startcode.git) and another one for the unit-test project (https://github.com/selabhvl/dat110-project3-testing.git).
+In the unit-test IDE, you will also need to import the original project into the IDE workspace but make sure you DO NOT SELECT THE OPTION TO COPY THE PROJECT INTO THE WORKSPACE. The project must be using the same directory as in the first IDE. You can then configure your build path for the unit-test project to include the original project as a required project.
+Attempting to test using the same IDE will be difficult because you will have processes that are running with multiple threads and printing info to the output at a regular interval. Therefore, when you have implemented missing functionalities and need to test, you should start the 5 processes located in (no.hvl.dat110.peers) and switch to the IDE holding the unit test classes to test whichever functionalities you have implemented.
+Running the processes outside of the IDE is also possible. You can jar the processes using the script located in /chordjars. To do this, you should copy the bin folder containing compiled classes from your project into the chordjars folder, go to the terminal, change directory to the chordjars folder and execute the bash script ./chord.sh
+You can then open new windows/tabs from your terminal and execute $> java -jar process1.jar and repeat this for the remaining 4 processes in their own window. 
+Short videos are provided on Canvas explaining how you can use both approaches to test your implementations.
+
+### Handing in the project
+Each group must hand in a link on Canvas to a git-repository containing their implementation and screen-shots showing the result of running all the unit-tests.
+
+Please remember to hand-in as a member of a group in Canvas: https://hvl365-my.sharepoint.com/:w:/g/personal/akv_hvl_no/EdkQXNKVjmhPrHNtD3n5r74B6KSb7DwmVYf9MA3SIUA4Sw?e=hC5Q9i
