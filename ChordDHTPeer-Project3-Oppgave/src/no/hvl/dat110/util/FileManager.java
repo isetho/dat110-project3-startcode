@@ -122,7 +122,7 @@ public class FileManager {
     	
     	
     	
-    	
+    	// Iselin sin metode, funket ikke så satte inn Bettina sin da den funker
     	
     	//int counter = 0;
     	
