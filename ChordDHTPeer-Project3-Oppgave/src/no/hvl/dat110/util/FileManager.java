@@ -80,7 +80,51 @@ public class FileManager {
      * @throws RemoteException 
      */
     public int distributeReplicastoPeers() throws RemoteException {
+    	
     	int counter = 0;
+
+		// Task1: Given a filename, make replicas and distribute them to all active
+		// peers such that: pred < replica <= peer
+
+		// Task2: assign a replica as the primary for this file. Hint, see the slide
+		// (project 3) on Canvas
+		
+		Random rand = new Random();
+		int index = rand.nextInt(Util.numReplicas);
+
+		// create replicas of the filename
+		createReplicaFiles();
+		
+		// iterate over the replicas
+		for (int i = 0; i < replicafiles.length; i++) {
+
+			BigInteger replica = replicafiles[i];
+
+		// for each replica, find its successor by performing findSuccessor(replica)
+			NodeInterface successor = chordnode.findSuccessor(replica);
+
+		// call the addKey on the successor and add the replica
+			successor.addKey(replica);
+
+		// call the saveFileContent() on the successor
+			if (i == index) {
+				successor.saveFileContent(filename, replica, bytesOfFile, true);
+			} else {
+				successor.saveFileContent(filename, replica, bytesOfFile, false);
+			}
+		}
+		// increment counter
+			counter++;
+			return counter;
+		
+    }
+    	
+    	
+    	
+    	
+    	
+    	
+    	//int counter = 0;
     	
     	// Task1: Given a filename, make replicas and distribute them to all active peers such that: pred < replica <= peer
     	
@@ -98,23 +142,24 @@ public class FileManager {
     	
     	// increment counter
     	
-    	for(int i = 0; i < replicafiles.length; i++) {
+    	//for(int i = 0; i < replicafiles.length; i++) {
     		
-			BigInteger fileID = (BigInteger) replicafiles[i];
-			ChordNodeInterface succOfFileID = chordnode.findSuccessor(fileID);
+		//	BigInteger fileID = (BigInteger) replicafiles[i];
+			//NodeInterface succOfFileID = chordnode.findSuccessor(fileID);
 			
 			// if we find the successor node of fileID, we can assign the file to the successor. This should always work even with one node
-			if(succOfFileID != null) {
+			//if(succOfFileID != null) {
 				
-				succOfFileID.addToFileKey(fileID);
-				String initialcontent = chordnode.getNodeIP()+"\n"+chordnode.getNodeID();
-				succOfFileID.createFileInNodeLocalDirectory(initialcontent, fileID);			// copy the file to the successor local dir
-			}			
-		}
+				//succOfFileID.addKey(fileID);
+				//String initialcontent = chordnode.getNodeID()+"\n"+chordnode.getNodeID();
+				//succOfFileID.createFileInNodeLocalDirectory(initialcontent, fileID);			// copy the file to the successor local dir
+					// den funker ikke dessverre
+			//}			
+		//}
     	
     		
-		return counter;
-    }
+		//return counter;
+    //}
 	
 	/**
 	 * 
@@ -125,22 +170,31 @@ public class FileManager {
 	public Set<Message> requestActiveNodesForFile(String filename) throws RemoteException {
 		
 		this.filename = filename;
-		Set<Message> succinfo = new HashSet<Message>();
+		Set<Message> successorinfo = new HashSet<Message>();
 		// Task: Given a filename, find all the peers that hold a copy of this file
-		
+
 		// generate the N replicas from the filename by calling createReplicaFiles()
-		
+
+		createReplicaFiles();
+
 		// it means, iterate over the replicas of the file
-		
 		// for each replica, do findSuccessor(replica) that returns successor s.
-		
-		// get the metadata (Message) of the replica from the successor, s (i.e. active peer) of the file
-		
+		for (int i = 0; i < replicafiles.length; i++) {
+			BigInteger replica = replicafiles[i];
+			NodeInterface successor = chordnode.findSuccessor(replica);
+			
+
+		// get the metadata (Message) of the replica from the successor, s (i.e. active
+		// peer) of the file
+			Message metadata = successor.getFilesMetadata(replica);
+			
 		// save the metadata in the set succinfo.
-		
-		this.activeNodesforFile = succinfo;
-		
-		return succinfo;
+			successorinfo.add(metadata);
+		}
+
+		this.activeNodesforFile = successorinfo;
+
+		return successorinfo;
 	}
 	
 	/**
