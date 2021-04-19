@@ -11,10 +11,15 @@ import java.math.BigInteger;
 import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import javax.xml.bind.DatatypeConverter;
 
 public class Hash { 
 	
-	private static BigInteger hashint; 
+	// Class variables
+	private static BigInteger hashint;
+		
+	public static int mbit = 4;
+	public static int sbit = 4;
 	
 	public static BigInteger hashOf(String entity) {		
 		
@@ -29,6 +34,24 @@ public class Hash {
 		// convert the hex into BigInteger
 		
 		// return the BigInteger
+		
+		try {
+			
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			
+			byte[] digest = md.digest(entity.getBytes("utf8"));
+			
+			mbit = digest.length*8;
+			
+			String hashValue = DatatypeConverter.printHexBinary(digest);
+			
+			hashint = new BigInteger(hashValue, 16);
+			
+		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e){
+			
+			e.printStackTrace();
+			
+		}
 		
 		return hashint;
 	}
@@ -45,7 +68,11 @@ public class Hash {
 		
 		// return the address size
 		
-		return null;
+		BigInteger modulos = new BigInteger("2");
+		
+		modulos = modulos.pow(mbit);
+		
+		return modulos;
 	}
 	
 	public static int bitSize() {
