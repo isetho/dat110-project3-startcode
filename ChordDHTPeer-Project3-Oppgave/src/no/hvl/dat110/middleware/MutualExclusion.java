@@ -99,8 +99,10 @@ public class MutualExclusion {
 		// iterate over the activenodes
 		for(int i = 0; i < activenodes.size(); i++) {
 			
+			
 		}
 		// obtain a stub for each node from the registry
+		
 		
 		onMutexRequestReceived(message);
 		// call onMutexRequestReceived()
@@ -108,6 +110,7 @@ public class MutualExclusion {
 	}
 	
 	public void onMutexRequestReceived(Message message) throws RemoteException {
+		
 		
 		// increment the local clock
 		
