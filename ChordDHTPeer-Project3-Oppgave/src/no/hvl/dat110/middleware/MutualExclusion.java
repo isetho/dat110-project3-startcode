@@ -79,8 +79,9 @@ public class MutualExclusion {
 		// check that all replicas have replied (permission)
 		
 		// if yes, acquireLock
+		acquireLock();
 		
-		// node.broadcastUpdatetoPeers
+		//node.broadcastUpdatetoPeers
 		
 		// clear the mutexqueue
 		
