@@ -98,6 +98,20 @@ public class FileManager {
     	
     	// increment counter
     	
+    	for(int i = 0; i < replicafiles.length; i++) {
+    		
+			BigInteger fileID = (BigInteger) replicafiles[i];
+			ChordNodeInterface succOfFileID = chordnode.findSuccessor(fileID);
+			
+			// if we find the successor node of fileID, we can assign the file to the successor. This should always work even with one node
+			if(succOfFileID != null) {
+				
+				succOfFileID.addToFileKey(fileID);
+				String initialcontent = chordnode.getNodeIP()+"\n"+chordnode.getNodeID();
+				succOfFileID.createFileInNodeLocalDirectory(initialcontent, fileID);			// copy the file to the successor local dir
+			}			
+		}
+    	
     		
 		return counter;
     }
