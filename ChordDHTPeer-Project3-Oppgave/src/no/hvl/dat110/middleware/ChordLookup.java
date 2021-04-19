@@ -5,6 +5,8 @@ package no.hvl.dat110.middleware;
 
 import java.math.BigInteger;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
