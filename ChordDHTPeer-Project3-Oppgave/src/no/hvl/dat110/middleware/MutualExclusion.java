@@ -48,6 +48,9 @@ public class MutualExclusion {
 	public boolean doMutexRequest(Message message, byte[] updates) throws RemoteException {
 		
 		System.out.println(node.nodename + " wants to access CS");
+		WANTS_TO_ENTER_CS = true;
+		
+		
 		
 		// clear the queueack before requesting for votes
 		
