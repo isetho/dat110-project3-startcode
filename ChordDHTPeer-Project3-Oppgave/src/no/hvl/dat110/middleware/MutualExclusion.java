@@ -48,23 +48,33 @@ public class MutualExclusion {
 	public boolean doMutexRequest(Message message, byte[] updates) throws RemoteException {
 		
 		System.out.println(node.nodename + " wants to access CS");
+		WANTS_TO_ENTER_CS = true;
 		
 		// clear the queueack before requesting for votes
+		queueack.clear();
 		
 		// clear the mutexqueue
+		mutexqueue.clear();
 		
-		// increment clock
+		// increment clock ??
+		
 		
 		// adjust the clock on the message, by calling the setClock on the message
-				
+		message.setClock(); // må være int 
+		
 		// wants to access resource - set the appropriate lock variable
+		
 	
 		
 		// start MutualExclusion algorithm
 		
+		
+		
 		// first, removeDuplicatePeersBeforeVoting. A peer can contain 2 replicas of a file. This peer will appear twice
+		
 
 		// multicast the message to activenodes (hint: use multicastMessage)
+		
 		
 		// check that all replicas have replied (permission)
 		
@@ -83,10 +93,15 @@ public class MutualExclusion {
 	// multicast message to other processes including self
 	private void multicastMessage(Message message, List<Message> activenodes) throws RemoteException {
 		
-		// iterate over the activenodes
 		
+		
+		// iterate over the activenodes
+		for(int i = 0; i < activenodes.size(); i++) {
+			
+		}
 		// obtain a stub for each node from the registry
 		
+		onMutexRequestReceived(message);
 		// call onMutexRequestReceived()
 		
 	}
@@ -96,6 +111,9 @@ public class MutualExclusion {
 		// increment the local clock
 		
 		// if message is from self, acknowledge, and call onMutexAcknowledgementReceived()
+		if(message.isAcknowledged()) {
+			onMutexAcknowledgementReceived(message);
+		}
 			
 		int caseid = -1;
 		
@@ -119,7 +137,9 @@ public class MutualExclusion {
 			case 0: {
 				// get a stub for the sender from the registry
 				// acknowledge message
+				message.isAcknowledged();
 				// send acknowledgement back by calling onMutexAcknowledgementReceived()
+				onMutexAcknowledgementReceived(message);
 				
 				break;
 			}
@@ -162,15 +182,25 @@ public class MutualExclusion {
 	// multicast release locks message to other processes including self
 	public void multicastReleaseLocks(Set<Message> activenodes) {
 		
+		
+		for(int i = 0; i < activenodes.size(); i++) {
+			
+		}
 		// iterate over the activenodes
 		
 		// obtain a stub for each node from the registry
 		
 		// call releaseLocks()
+		releaseLocks();
 	
 	}
 	
 	private boolean areAllMessagesReturned(int numvoters) throws RemoteException {
+		
+		if(queueack.size() == numvoters) {
+			queueack.clear();
+			return true;
+		}
 		// check if the size of the queueack is same as the numvoters
 		
 		// clear the queueack
