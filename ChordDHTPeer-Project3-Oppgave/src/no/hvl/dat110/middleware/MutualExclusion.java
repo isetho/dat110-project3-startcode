@@ -84,6 +84,7 @@ public class MutualExclusion {
 		//node.broadcastUpdatetoPeers
 		
 		// clear the mutexqueue
+		mutexqueue.clear();
 		
 		// return permission
 		
@@ -120,6 +121,7 @@ public class MutualExclusion {
 		}
 			
 		int caseid = -1;
+		if()
 		
 		// write if statement to transition to the correct caseid
 		// caseid=0: Receiver is not accessing shared resource and does not want to (send OK to sender)
@@ -140,6 +142,7 @@ public class MutualExclusion {
 			/** case 1: Receiver is not accessing shared resource and does not want to (send OK to sender) */
 			case 0: {
 				// get a stub for the sender from the registry
+				
 				// acknowledge message
 				message.isAcknowledged();
 				// send acknowledgement back by calling onMutexAcknowledgementReceived()
@@ -150,7 +153,7 @@ public class MutualExclusion {
 		
 			/** case 2: Receiver already has access to the resource (dont reply but queue the request) */
 			case 1: {
-				
+				queue.add(message);
 				// queue this message
 				break;
 			}
@@ -180,6 +183,7 @@ public class MutualExclusion {
 	public void onMutexAcknowledgementReceived(Message message) throws RemoteException {
 		
 		// add message to queueack
+		queueack.add(message);
 		
 	}
 	
